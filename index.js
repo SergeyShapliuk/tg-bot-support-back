@@ -6,8 +6,7 @@ const UserModel = require('./models');
 
 const TelegramBot = require("node-telegram-bot-api");
 
-// const token = process.env.BOT_TOKEN;
-const token = '7546029935:AAFolPgihwYReqSbIEgGVgUpIUZiM1MWYVA';
+const token = process.env.BOT_TOKEN;
 
 const bot = new TelegramBot(token, {polling: true});
 const app = express();
@@ -95,30 +94,30 @@ async function createUserIfNotExists(chat_id) {
 
 app.get('/points', async (req, res) => {
     try {
-        const { chatId } = req.query;
+        const {chatId} = req.query;
 
         // Логирование входных данных для отладки
         console.log('req', chatId);
         console.log('reqQuery', req.query);
 
         // Поиск пользователя в базе данных
-        const user = await UserModel.findOne({ where: { chatId } });
+        const user = await UserModel.findOne({where: {chatId}});
 
         if (!user) {
             // Если пользователь не найден, возвращаем 404
-            return res.status(404).json({ error: 'User not found' });
+            return res.status(404).json({error: 'User not found'});
         }
 
         // Логирование найденного пользователя
         console.log('req2', user);
 
         // Возвращаем количество очков пользователя
-        res.json({ points: user.dataValues.points });
+        res.json({points: user.dataValues.points});
 
     } catch (error) {
         // Обработка ошибок
         console.error('Error fetching points:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({error: 'Internal Server Error'});
     }
 });
 
