@@ -30,7 +30,7 @@ const start_bot = async () => {
 
     bot.setMyCommands([
         {command: 'start', description: 'Запуск бота'},
-        //     {command: 'info', description: 'Info'},
+        {command: 'play', description: 'Тестирование'},
     ]).then(res => console.log('res', res))
 
     bot.on('message', async msg => {
@@ -45,10 +45,10 @@ const start_bot = async () => {
                     filename: 'sticker_Durov',
                     contentType: 'image/webp'
                 })
-                await bot.sendMessage(chat_id, `Добро пожаловать ${msg.from.first_name}`, {
+                await bot.sendMessage(chat_id, `Welcome ${msg.from.first_name}!`, {
                     reply_markup: {
                         inline_keyboard: [
-                            [{text: 'Game', web_app: {url: 'https://few-actors-add.loca.lt'}}],
+                            [{text: 'Game', web_app: {url: 'https://some-swans-begin.loca.lt'}}],
                             [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                         ], resize_keyboard: true
                     }
@@ -63,9 +63,15 @@ const start_bot = async () => {
             //     await bot.sendMessage(chat_id, 'Пользователь не найден');
             // }
             // }
-            // if (text === '/portfolio') {
-            //     await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`)
-            // }
+            if (text === '/play') {
+                await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`,{
+                    reply_markup: {
+                        inline_keyboard: [
+                            [{text: 'Game', web_app: {url: 'https://eight-comics-tickle.loca.lt'}}],
+                        ], resize_keyboard: true
+                    }
+                })
+            }
         } catch (e) {
             return bot.sendMessage(chat_id, 'Произошла какая то ошибка');
         }
