@@ -1,4 +1,6 @@
 require('dotenv').config();
+const fs = require('fs');
+
 // const express = require('express');
 // const cors = require('cors');
 // const sequelize = require('./db');
@@ -27,7 +29,7 @@ const start_bot = async () => {
 
     bot.setMyCommands([
         {command: 'start', description: 'Запуск бота'},
-        {command: 'info', description: 'Info'},
+        //     {command: 'info', description: 'Info'},
     ]).then(res => console.log('res', res))
 
     bot.on('message', async msg => {
@@ -37,27 +39,32 @@ const start_bot = async () => {
             if (text === '/start') {
                 // await sequelize.truncate();
                 // await createUserIfNotExists(chat_id)
-                await bot.sendSticker(chat_id, `https://data.chpic.su/stickers/h/HelloDigitalWorld/HelloDigitalWorld_001.webp?v=1709113684`)
+                const stickerPath = './public/assets/sticker_Durov.webp';
+                await bot.sendSticker(chat_id, fs.createReadStream(stickerPath), {}, {
+                    filename: 'sticker_Durov',
+                    contentType: 'image/webp'
+                })
                 await bot.sendMessage(chat_id, `Добро пожаловать ${msg.from.first_name}`, {
                     reply_markup: {
                         inline_keyboard: [
-                            [{text: 'Мини игра', web_app: {url: 'https://fifty-peaches-happen.loca.lt'}}]
+                            [{text: 'Game', web_app: {url: 'https://few-actors-add.loca.lt'}}],
+                            [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                         ], resize_keyboard: true
                     }
                 })
             }
-            if (text === '/info') {
-                // const user = await UserModel.findOne({where: {chatId: chat_id}});
-                // console.log('pg', user)
-                // if (user.dataValues.chatId) {
-                //     await bot.sendMessage(chat_id, `Ваш id чата ${user.dataValues.chatId} ${user.dataValues.points} поинтов`);
-                // } else {
-                //     await bot.sendMessage(chat_id, 'Пользователь не найден');
-                // }
-            }
-            if (text === '/portfolio') {
-                await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`)
-            }
+            // if (text === '/info') {
+            // const user = await UserModel.findOne({where: {chatId: chat_id}});
+            // console.log('pg', user)
+            // if (user.dataValues.chatId) {
+            //     await bot.sendMessage(chat_id, `Ваш id чата ${user.dataValues.chatId} ${user.dataValues.points} поинтов`);
+            // } else {
+            //     await bot.sendMessage(chat_id, 'Пользователь не найден');
+            // }
+            // }
+            // if (text === '/portfolio') {
+            //     await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`)
+            // }
         } catch (e) {
             return bot.sendMessage(chat_id, 'Произошла какая то ошибка');
         }
@@ -70,7 +77,6 @@ const start_bot = async () => {
 }
 
 start_bot().then();
-
 // async function createUserIfNotExists(chat_id) {
 //     try {
 //         // Пытаемся найти пользователя с заданным chatId
