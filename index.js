@@ -1,5 +1,6 @@
 require('dotenv').config();
 const fs = require('fs');
+const axios = require('axios');
 
 // const express = require('express');
 // const cors = require('cors');
@@ -34,50 +35,94 @@ const start_bot = async () => {
     ]).then(res => console.log('res', res))
 
     bot.on('message', async msg => {
-        const text = msg.text
-        const chat_id = msg.chat.id
-        try {
-            if (text === '/start') {
-                // await sequelize.truncate();
-                // await createUserIfNotExists(chat_id)
-                const stickerPath = './public/assets/sticker_Durov.webp';
-                await bot.sendSticker(chat_id, fs.createReadStream(stickerPath), {}, {
-                    filename: 'sticker_Durov',
-                    contentType: 'image/webp'
-                })
-                await bot.sendMessage(chat_id, `Welcome ${msg.from.first_name}!`, {
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{text: 'Game', web_app: {url: 'https://some-swans-begin.loca.lt'}}],
-                            [{text: 'Join community', url: 'https://t.me/sup_durov'}]
-                        ], resize_keyboard: true
+            const text = msg.text
+            const chat_id = msg.chat.id
+            try {
+                if (text.startsWith('/start')) {
+                    const userName = msg.chat.username ?? msg.chat.first_name
+                    const parts = text.split(" ");
+                    let referralCode = null;
+                    // await sequelize.truncate();
+                    // await createUserIfNotExists(chat_id)
+                    if (parts.length > 1) {
+                        referralCode = parts[1].replace('ref_', '');  // Убираем префикс ref_
                     }
-                })
-            }
-            // if (text === '/info') {
-            // const user = await UserModel.findOne({where: {chatId: chat_id}});
-            // console.log('pg', user)
-            // if (user.dataValues.chatId) {
-            //     await bot.sendMessage(chat_id, `Ваш id чата ${user.dataValues.chatId} ${user.dataValues.points} поинтов`);
-            // } else {
-            //     await bot.sendMessage(chat_id, 'Пользователь не найден');
-            // }
-            // }
-            if (text === '/play') {
-                await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`,{
-                    reply_markup: {
-                        inline_keyboard: [
-                            [{text: 'Game', web_app: {url: 'https://eight-comics-tickle.loca.lt'}}],
-                        ], resize_keyboard: true
-                    }
-                })
-            }
-        } catch (e) {
-            return bot.sendMessage(chat_id, 'Произошла какая то ошибка');
-        }
+                    if (referralCode) {
+                        // console.log('userName', userName)
+                        // console.log('telegram_id', chat_id)
+                        // console.log('code', referralCode)
+                        await axios.post('https://sd-api.faexb.com/api/use-ref-code',
+                            {
+                                telegram_id: chat_id,
+                                telegram_name: userName,
+                                code: referralCode
+                            },
+                            {
+                                headers: {
+                                    "Content-Type": "multipart/form-data"
+                                }
+                            });
+                        // if (response.data?.resp === 'ok') {
+                        //     const response2 = await axios.post('https://sd-api.faexb.com/api/set-uset-info',
+                        //         {
+                        //             telegram_id: 'test_test10',
+                        //             telegram_name: 'Name_telegramChange',
+                        //         },
+                        //         {
+                        //             headers: {
+                        //                 "Content-Type": "multipart/form-data"
+                        //             }
+                        //         });
+                        //     console.log('res2', response2.data)
+                        // }
+                        // console.log('res', response.data)
 
-        console.log(msg)
-    })
+                        // console.log('status', response.status)
+                        // console.log('config', response.config)
+                        await bot.sendMessage(chat_id, `Ваш реферальный код: ${referralCode}`);
+                    } else {
+                        await bot.sendMessage(chat_id, 'Реферальный код не найден.');
+                    }
+                    const stickerPath = './public/assets/sticker_Durov.webp';
+                    await bot.sendSticker(chat_id, fs.createReadStream(stickerPath), {}, {
+                        filename: 'sticker_Durov',
+                        contentType: 'image/webp'
+                    })
+                    await bot.sendMessage(chat_id, `Welcome ${msg.from.first_name}!`, {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{text: 'Game', web_app: {url: 'https://swift-memes-hang.loca.lt'}}],
+                                [{text: 'Join community', url: 'https://t.me/sup_durov'}]
+                            ], resize_keyboard: true
+                        }
+                    })
+                }
+                // if (text === '/info') {
+                // const user = await UserModel.findOne({where: {chatId: chat_id}});
+                // console.log('pg', user)
+                // if (user.dataValues.chatId) {
+                //     await bot.sendMessage(chat_id, `Ваш id чата ${user.dataValues.chatId} ${user.dataValues.points} поинтов`);
+                // } else {
+                //     await bot.sendMessage(chat_id, 'Пользователь не найден');
+                // }
+                // }
+                if (text === '/play') {
+                    await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`, {
+                        reply_markup: {
+                            inline_keyboard: [
+                                [{text: 'Game', web_app: {url: 'https://orange-boxes-lie.loca.lt'}}],
+                            ], resize_keyboard: true
+                        }
+                    })
+                }
+            } catch
+                (e) {
+                return bot.sendMessage(chat_id, 'Произошла какая то ошибка');
+            }
+
+            console.log(msg)
+        }
+    )
     // bot.on('callback_query', msg => {
     //     console.log('callback_query', msg)
     // })
