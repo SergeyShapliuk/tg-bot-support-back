@@ -28,12 +28,18 @@ const start_bot = async () => {
     // } catch (e) {
     //     console.log('Ошибка подключения к базе данных', e)
     // }
+    if (process.env.NODE_ENV === 'development') {
+        bot.setMyCommands([
+            {command: 'start', description: 'Запуск бота'},
+            {command: 'play', description: 'Тестирование'},
+        ]).then(res => console.log('res', res))
+    } else {
+        bot.setMyCommands([
+            {command: 'start', description: 'Запуск бота'},
+        ]).then(res => console.log('res', res))
+    }
 
-    bot.setMyCommands([
-        {command: 'start', description: 'Запуск бота'},
-        {command: 'play', description: 'Тестирование'},
-    ]).then(res => console.log('res', res))
-
+    console.log('env', process.env.NODE_ENV)
     bot.on('message', async msg => {
             const text = msg.text
             const chat_id = msg.chat.id
@@ -79,10 +85,11 @@ const start_bot = async () => {
 
                         // console.log('status', response.status)
                         // console.log('config', response.config)
-                        await bot.sendMessage(chat_id, `Ваш реферальный код: ${referralCode}`);
-                    } else {
-                        await bot.sendMessage(chat_id, 'Реферальный код не найден.');
                     }
+                    //     await bot.sendMessage(chat_id, `Ваш реферальный код: ${referralCode}`);
+                    // } else {
+                    //     await bot.sendMessage(chat_id, 'Реферальный код не найден.');
+                    // }
                     const stickerPath = './public/assets/sticker_Durov.webp';
                     await bot.sendSticker(chat_id, fs.createReadStream(stickerPath), {}, {
                         filename: 'sticker_Durov',
@@ -91,7 +98,7 @@ const start_bot = async () => {
                     await bot.sendMessage(chat_id, `Welcome ${msg.from.first_name}!`, {
                         reply_markup: {
                             inline_keyboard: [
-                                [{text: 'Game', web_app: {url: 'https://swift-memes-hang.loca.lt'}}],
+                                [{text: 'Game', web_app: {url: 'https://tg-bot-support.onrender.com'}}],
                                 [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                             ], resize_keyboard: true
                         }
@@ -110,7 +117,7 @@ const start_bot = async () => {
                     await bot.sendMessage(chat_id, `https://sergeyshapliuk.github.io/portfolio/`, {
                         reply_markup: {
                             inline_keyboard: [
-                                [{text: 'Game', web_app: {url: 'https://orange-boxes-lie.loca.lt'}}],
+                                [{text: 'Game', web_app: {url: 'https://yummy-pianos-marry.loca.lt'}}],
                             ], resize_keyboard: true
                         }
                     })
