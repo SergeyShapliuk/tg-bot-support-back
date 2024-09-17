@@ -98,7 +98,7 @@ const start_bot = async () => {
                     await bot.sendMessage(chat_id, `Welcome ${msg.from.first_name}!`, {
                         reply_markup: {
                             inline_keyboard: [
-                                [{text: 'Game', web_app: {url: 'https://tg-bot-support.onrender.com'}}],
+                                [{text: 'Game', web_app: {url: 'https://supdrteam.com/'}}],
                                 [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                             ], resize_keyboard: true
                         }
