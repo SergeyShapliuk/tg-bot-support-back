@@ -53,10 +53,8 @@ const start_bot = async () => {
                     if (parts.length > 1) {
                         referralCode = parts[1].replace('ref_', '');  // Убираем префикс ref_
                     }
+                    // console.log('referralCode', referralCode)
                     if (referralCode) {
-                        // console.log('userName', userName)
-                        // console.log('telegram_id', chat_id)
-                        // console.log('code', referralCode)
                         await axios.post('https://sd-api.faexb.com/api/use-ref-code',
                             {
                                 telegram_id: chat_id,
@@ -68,23 +66,18 @@ const start_bot = async () => {
                                     "Content-Type": "multipart/form-data"
                                 }
                             });
-                        // if (response.data?.resp === 'ok') {
-                        //     const response2 = await axios.post('https://sd-api.faexb.com/api/set-uset-info',
-                        //         {
-                        //             telegram_id: 'test_test10',
-                        //             telegram_name: 'Name_telegramChange',
-                        //         },
-                        //         {
-                        //             headers: {
-                        //                 "Content-Type": "multipart/form-data"
-                        //             }
-                        //         });
-                        //     console.log('res2', response2.data)
-                        // }
-                        // console.log('res', response.data)
-
-                        // console.log('status', response.status)
-                        // console.log('config', response.config)
+                    } else {
+                        await axios.post('https://sd-api.faexb.com/api/set-user-info',
+                            {
+                                telegram_id: chat_id,
+                                telegram_name: userName,
+                            },
+                            {
+                                headers: {
+                                    "Content-Type": "multipart/form-data"
+                                }
+                            });
+                        // console.log('res2', response2.data)
                     }
                     //     await bot.sendMessage(chat_id, `Ваш реферальный код: ${referralCode}`);
                     // } else {
@@ -98,7 +91,10 @@ const start_bot = async () => {
                     await bot.sendMessage(chat_id, `Welcome ${msg.from.first_name}!`, {
                         reply_markup: {
                             inline_keyboard: [
-                                [{text: 'Game', web_app: {url: 'https://supdrteam.com/'}}],
+                                [{
+                                    text: 'Game',
+                                    web_app: {url: process.env.NODE_ENV === 'development' ? 'https://slick-books-swim.loca.lt' : 'https://supdrteam.com/'}
+                                }],
                                 [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                             ], resize_keyboard: true
                         }
