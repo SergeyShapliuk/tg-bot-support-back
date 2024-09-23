@@ -93,7 +93,7 @@ const start_bot = async () => {
                             inline_keyboard: [
                                 [{
                                     text: 'Game',
-                                    web_app: {url: process.env.NODE_ENV === 'development' ? 'https://slick-books-swim.loca.lt' : 'https://supdrteam.com/'}
+                                    web_app: {url: process.env.NODE_ENV === 'development' ? 'https://slick-books-swim.loca.lt' : 'https://tg-bot-support-a733.onrender.com'}
                                 }],
                                 [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                             ], resize_keyboard: true
