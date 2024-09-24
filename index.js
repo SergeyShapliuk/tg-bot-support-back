@@ -93,7 +93,7 @@ const start_bot = async () => {
                             inline_keyboard: [
                                 [{
                                     text: 'Game',
-                                    web_app: {url: 'https://supdrteam.com'}
+                                    web_app: {url: 'https://tg-bot-support.onrender.com'}
                                 }],
                                 [{text: 'Join community', url: 'https://t.me/sup_durov'}]
                             ], resize_keyboard: true
