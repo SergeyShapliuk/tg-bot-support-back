@@ -39,7 +39,8 @@ const start_bot = async () => {
         ]).then(res => console.log('res', res))
     }
 
-    console.log('env', process.env.NODE_ENV)
+    // console.log('env', process.env.NODE_ENV)
+    // console.log('token', process.env.BOT_TOKEN)
     bot.on('message', async msg => {
             const text = msg.text
             const chat_id = msg.chat.id
@@ -120,10 +121,20 @@ const start_bot = async () => {
                 }
             } catch
                 (e) {
-                return bot.sendMessage(chat_id, 'Произошла какая то ошибка');
+                console.error('Ошибка при обработке сообщения:', e);
+                try {
+                    await bot.sendMessage(chat_id, 'Произошла какая то ошибка');
+                } catch (error) {
+                    if (error.code === 'ETELEGRAM' && error.response.error_code === 403) {
+                        console.log(`Пользователь ${chat_id} заблокировал бота.`);
+                    } else {
+                        console.error('Ошибка при отправке сообщения:', error);
+                    }
+                }
+
             }
 
-            console.log(msg)
+            // console.log(msg)
         }
     )
     // bot.on('callback_query', msg => {
